@@ -1,10 +1,11 @@
 // Screen 2, at "/systems": the five systems in the range, one tab each, with
 // what each is for and its part numbers, with the guide's product photos in
 // the tables as the guide prints them. The open tab is in the address
-// (?system=dorian) so other pages can link straight to one.
+// (?system=dorian) so other pages can link straight to one, and a section
+// name after it (#hpt-nozzles) opens the page at that section.
 
-import type { ReactNode } from "react";
-import { useSearchParams } from "react-router";
+import { useEffect, type ReactNode } from "react";
+import { useLocation, useSearchParams } from "react-router";
 import { Badge, Button, Caption, Code, Columns, Link, Prose, Row, Stack, Table, Tabs } from "@livetools/ui";
 import type { TabItem, TableColumn, TableRow } from "@livetools/ui";
 import {
@@ -44,6 +45,7 @@ import { LOC_LINE_CATALOGUE, PIRANHA_CATALOGUE } from "../data/catalogues";
 import { SYSTEMS, type SystemId } from "../data/systems";
 import { NavLink } from "../lib/navLink";
 import { picture, thumb } from "../lib/thumb";
+import { HPT_SECTION_ID, HptNozzles } from "./HptNozzles";
 
 const PICTURE: TableColumn = { id: "picture", label: "Picture", headingHidden: true };
 
@@ -407,13 +409,14 @@ function LocLine() {
         <Button href="/parts?range=Loc-Line" linkComponent={NavLink}>
           Every Loc-Line part number
         </Button>
-        <Button variant="secondary" href="/hpt" linkComponent={NavLink}>
+        <Button variant="secondary" href={`/systems?system=locline#${HPT_SECTION_ID}`} linkComponent={NavLink}>
           Find an HPT nozzle
         </Button>
         <Button variant="secondary" icon="download" href={LOC_LINE_CATALOGUE.href} linkComponent={NavLink}>
           {LOC_LINE_CATALOGUE.label}
         </Button>
       </Row>
+      <HptNozzles />
     </Stack>
   );
 }
@@ -441,6 +444,12 @@ export function Systems() {
   const [params, setParams] = useSearchParams();
   const asked = params.get("system");
   const value = isSystemId(asked) ? asked : "stainless";
+  const { hash } = useLocation();
+
+  // An address ending in a section's name (#hpt-nozzles) opens at that section once its tab is showing.
+  useEffect(() => {
+    if (hash !== "") document.getElementById(decodeURIComponent(hash.slice(1)))?.scrollIntoView();
+  }, [hash, value]);
 
   return (
     <Stack>

@@ -246,7 +246,7 @@ export const LOC_LINE_POPULAR: readonly Pictured[] = [
   { name: "90 degree spray bar", what: "Coolant parallel to the work", photo: "locline-spray-bar", href: locLineFinder("Spray Bar") },
   { name: "ProStream nozzle", what: 'Stainless tube, 0.062" to 0.160" bore', photo: "locline-prostream", href: locLineFinder("ProStream") },
   { name: "Brass ball adapters", what: '10, 12, 14 and 15 mm balls to 1/4" Loc-Line', photo: "locline-ball-adapters", href: locLineFinder("Ball Adapter") },
-  { name: "HPT turret nozzle", what: "CT and XR styles, to 1,000 psi", photo: "locline-hpt", href: "/hpt" },
+  { name: "HPT turret nozzle", what: "CT and XR styles, to 1,000 psi", photo: "locline-hpt", href: "/systems?system=locline#hpt-nozzles" },
   { name: "NPT and BSPT connectors", what: '1/8" to 3/4" threads', photo: "locline-connectors", href: locLineFinder("Connector") },
 ];
 

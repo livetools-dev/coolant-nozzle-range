@@ -6,7 +6,7 @@
 // of a blank page.
 
 import { Component, type ErrorInfo, type ReactNode } from "react";
-import { BrowserRouter, Route, Routes, useLocation } from "react-router";
+import { BrowserRouter, Navigate, Route, Routes, useLocation } from "react-router";
 import {
   Alert,
   Button,
@@ -28,7 +28,7 @@ import { NavLink } from "./lib/navLink";
 import { FrontHero, Selector } from "./screens/Selector";
 import { Systems } from "./screens/Systems";
 import { Parts } from "./screens/Parts";
-import { Hpt } from "./screens/Hpt";
+import { HPT_SECTION_ID } from "./screens/HptNozzles";
 
 /** Where the app is served from: "/" locally, "/<repository>/" on GitHub Pages
  * without a custom domain. The router takes it without the trailing slash. */
@@ -39,7 +39,6 @@ const SECTIONS = [
   { label: "Choose a system", href: "/" },
   { label: "Systems", href: "/systems" },
   { label: "Part finder", href: "/parts" },
-  { label: "HPT nozzles", href: "/hpt" },
 ] as const;
 
 const FOOTER_COLUMNS: readonly FooterColumn[] = [
@@ -106,7 +105,8 @@ function Frame() {
           <Route path="/" element={<Selector />} />
           <Route path="/systems" element={<Systems />} />
           <Route path="/parts" element={<Parts />} />
-          <Route path="/hpt" element={<Hpt />} />
+          {/* The HPT nozzles moved into the Loc-Line tab; the old address leads there. */}
+          <Route path="/hpt" element={<Navigate to={`/systems?system=locline#${HPT_SECTION_ID}`} replace />} />
           <Route
             path="*"
             element={

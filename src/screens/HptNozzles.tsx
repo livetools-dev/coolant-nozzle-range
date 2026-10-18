@@ -1,12 +1,14 @@
-// Screen 4, at "/hpt": the Loc-Line HPT nozzle chooser. Pick the style,
-// thread, nozzle length and bore, and the screen gives the 2-pack and 10-pack
-// part numbers; under it, all 64 nozzles in one table. The style is in the
-// address (?style=XR), so another page can link to one.
+// The Loc-Line HPT nozzles, a section at the foot of the Loc-Line tab on the
+// Systems page (the old "/hpt" address leads there). The guide's pictures of
+// the CT and XR styles side by side, then the chooser: pick the style,
+// thread, nozzle length and bore, and it gives the 2-pack and 10-pack part
+// numbers; under it, all 64 nozzles in one table.
 
 import { useState } from "react";
-import { useSearchParams } from "react-router";
 import {
+  Caption,
   Code,
+  Columns,
   Form,
   FormGrid,
   Prose,
@@ -32,6 +34,12 @@ import {
   type HptStyle,
   type HptThread,
 } from "../data/hpt";
+import { picture } from "../lib/thumb";
+
+const STYLE_PICTURES: readonly { photo: string; caption: string }[] = [
+  { photo: "hpt-ct", caption: "CT, Compact Turret" },
+  { photo: "hpt-xr", caption: "XR, Extended Reach" },
+];
 
 const STYLE_ITEMS: readonly RadioItem[] = HPT_STYLES;
 const THREAD_ITEMS: readonly RadioItem[] = HPT_THREADS;
@@ -61,10 +69,11 @@ const ROWS: readonly TableRow[] = HPT_NOZZLES.map((n) => ({
   label: `${n.style} ${n.thread}" ${n.length}" long ${n.bore}" bore`,
 }));
 
-export function Hpt() {
-  const [params, setParams] = useSearchParams();
-  const style: HptStyle = params.get("style") === "XR" ? "XR" : "CT";
-  const setStyle = (next: HptStyle) => setParams({ style: next }, { replace: true, preventScrollReset: true });
+/** The section's id, which the Loc-Line tab's links and the old address jump to. */
+export const HPT_SECTION_ID = "hpt-nozzles";
+
+export function HptNozzles() {
+  const [style, setStyle] = useState<HptStyle>("CT");
   const [thread, setThread] = useState<HptThread>("1/8");
   const [length, setLength] = useState<string | null>(null);
   const [bore, setBore] = useState<string | null>(null);
@@ -72,15 +81,23 @@ export function Hpt() {
   const nozzle = length === null || bore === null ? null : hptNozzle(style, thread, length, bore);
 
   return (
-    <Stack>
+    <Stack id={HPT_SECTION_ID}>
       <Prose>
-        <h1>HPT nozzles</h1>
+        <h3>High Pressure Turret (HPT) nozzles, CT and XR styles</h3>
         <p>
-          Loc-Line High Pressure Turret nozzles, rated 0 to 1,000 psi and 115 °F at most. CT (Compact Turret) suits tight
-          spaces; XR (Extended Reach) gives 110 degree nozzle swing and reaches below the horizontal. Each comes in four
-          bore diameters and four nozzle lengths in each thread.
+          Rated 0 to 1,000 psi, 115 °F at most. CT (Compact Turret) suits tight spaces; XR (Extended Reach) gives 110
+          degree nozzle swing and reaches below the horizontal. Four bore diameters and four nozzle lengths in each
+          thread. 10-packs are also available in black (-BLK) or grey (-G).
         </p>
       </Prose>
+      <Columns count={2}>
+        {STYLE_PICTURES.map((p) => (
+          <Stack gap="sm" key={p.photo}>
+            {picture(p.photo, `Loc-Line HPT nozzle, ${p.caption}`, "photo")}
+            <Caption>{p.caption}</Caption>
+          </Stack>
+        ))}
+      </Columns>
       <Form onSubmit={() => {}}>
         <FormGrid>
           <RadioGroup
@@ -140,7 +157,7 @@ export function Hpt() {
         ]}
       />
       <Prose>
-        <h2>Every HPT nozzle</h2>
+        <h4>Every HPT nozzle</h4>
       </Prose>
       <Table
         label="Every HPT nozzle"
