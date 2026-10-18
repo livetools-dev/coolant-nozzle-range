@@ -45,3 +45,10 @@
 .app-strip {
   max-inline-size: var(--app-strip-size);
 }
+
+/* The HPT style pick (see src/screens/HptNozzles.tsx): the CT and XR pictures
+   over their two choice cards, held to a width where the cards fall into the
+   same two columns as the pictures, so each card sits under its picture. */
+.app-style-pick {
+  max-inline-size: var(--app-style-pick-size);
+}

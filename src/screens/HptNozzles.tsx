@@ -6,7 +6,6 @@
 
 import { useState } from "react";
 import {
-  Caption,
   Code,
   Columns,
   Form,
@@ -90,48 +89,48 @@ export function HptNozzles() {
           thread. 10-packs are also available in black (-BLK) or grey (-G).
         </p>
       </Prose>
-      <Columns count={2}>
-        {STYLE_PICTURES.map((p) => (
-          <Stack gap="sm" key={p.photo}>
-            {picture(p.photo, `Loc-Line HPT nozzle, ${p.caption}`, "photo")}
-            <Caption>{p.caption}</Caption>
-          </Stack>
-        ))}
-      </Columns>
       <Form onSubmit={() => {}}>
-        <FormGrid>
-          <RadioGroup
-            label="Style"
-            name="style"
-            items={STYLE_ITEMS}
-            value={style}
-            onValueChange={(v) => setStyle(v as HptStyle)}
-          />
-          <RadioGroup
-            label="Thread"
-            name="thread"
-            layout="buttons"
-            items={THREAD_ITEMS}
-            value={thread}
-            onValueChange={(v) => setThread(v as HptThread)}
-          />
-          <Select
-            label="Nozzle length"
-            name="length"
-            items={LENGTH_ITEMS}
-            placeholder="Choose a length"
-            value={length}
-            onValueChange={setLength}
-          />
-          <Select
-            label="Bore diameter"
-            name="bore"
-            items={BORE_ITEMS}
-            placeholder="Choose a bore"
-            value={bore}
-            onValueChange={setBore}
-          />
-        </FormGrid>
+        <Stack>
+          <Stack gap="sm" className="app-style-pick">
+            <Columns count={2}>
+              {STYLE_PICTURES.map((p) => picture(p.photo, `Loc-Line HPT nozzle, ${p.caption}`, "photo"))}
+            </Columns>
+            <RadioGroup
+              label="Style"
+              name="style"
+              layout="cards"
+              items={STYLE_ITEMS}
+              value={style}
+              onValueChange={(v) => setStyle(v as HptStyle)}
+            />
+          </Stack>
+          <FormGrid count={3}>
+            <RadioGroup
+              label="Thread"
+              name="thread"
+              layout="buttons"
+              items={THREAD_ITEMS}
+              value={thread}
+              onValueChange={(v) => setThread(v as HptThread)}
+            />
+            <Select
+              label="Nozzle length"
+              name="length"
+              items={LENGTH_ITEMS}
+              placeholder="Choose a length"
+              value={length}
+              onValueChange={setLength}
+            />
+            <Select
+              label="Bore diameter"
+              name="bore"
+              items={BORE_ITEMS}
+              placeholder="Choose a bore"
+              value={bore}
+              onValueChange={setBore}
+            />
+          </FormGrid>
+        </Stack>
       </Form>
       <Row>
         <Readout

@@ -6,4 +6,6 @@
   --app-photo-size: 20rem;
   --app-drawing-size: 34rem;
   --app-strip-size: 48rem;
+  /* Two choice cards (13rem each at least) fit, three do not. */
+  --app-style-pick-size: 36rem;
 }
