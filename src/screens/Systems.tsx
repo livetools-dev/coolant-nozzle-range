@@ -1,10 +1,12 @@
-// Screen 2, at "/systems": the five systems in the guide, one tab each, with
-// what each is for and its part numbers. The open tab is in the address
-// (?system=dorian) so the selector can link straight to one.
+// Screen 2, at "/systems": the five systems in the range, one tab each, with
+// what each is for, photos of its parts and its part numbers. Each photo card
+// leads to that product's part numbers (or, for Piranha, its catalogue). The
+// open tab is in the address (?system=dorian) so other pages can link
+// straight to one.
 
 import type { ReactNode } from "react";
 import { useSearchParams } from "react-router";
-import { Badge, Button, Caption, Code, Link, Prose, Row, Specs, Stack, Table, Tabs } from "@livetools/ui";
+import { Badge, Button, Caption, Code, ProductCard, ProductCards, Prose, Row, Stack, Table, Tabs } from "@livetools/ui";
 import type { TabItem, TableColumn, TableRow } from "@livetools/ui";
 import {
   DORIAN_BALLS,
@@ -12,6 +14,7 @@ import {
   DORIAN_HIGH_PRESSURE,
   DORIAN_INTRO,
   DORIAN_LOW_PRESSURE,
+  DORIAN_PICTURED,
   DORIAN_TOOL_POSTS,
   EVERMORE_INTRO,
   EVERMORE_MATCHING,
@@ -20,21 +23,23 @@ import {
   EVERMORE_SPECIALS,
   EVERMORE_TWO_PIECE,
   EVERMORE_TWO_PIECE_INTRO,
-  LOC_LINE_CATALOGUE,
   LOC_LINE_COLOURS,
-  LOC_LINE_HIGHLIGHTS,
   LOC_LINE_INTRO,
+  LOC_LINE_PICTURED,
   LOC_LINE_SYSTEMS,
   PIRANHA_INTRO,
   PIRANHA_PIECES,
   PIRANHA_SYSTEMS,
-  STAINLESS_BUILDS,
   STAINLESS_INTRO,
   STAINLESS_KITS,
+  STAINLESS_PICTURED,
   STAINLESS_SPARES,
   type CataloguePart,
   type DorianKit,
+  type Pictured,
 } from "../data/ranges";
+import { LOC_LINE_CATALOGUE, PIRANHA_CATALOGUE } from "../data/catalogues";
+import { photo } from "../lib/assets";
 import { SYSTEMS, type SystemId } from "../data/systems";
 import { NavLink } from "../lib/navLink";
 
@@ -70,6 +75,26 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
+/** A row of product photos, each card leading to that product. */
+function Gallery({ items }: { items: readonly Pictured[] }) {
+  return (
+    <ProductCards shape="square" backdrop="circle" count={3}>
+      {items.map((item) => (
+        <ProductCard
+          key={item.name}
+          href={item.href}
+          linkComponent={NavLink}
+          meta={item.what}
+          title={item.name}
+          image={photo(item.photo)}
+          imageAlign="centre"
+          imageScale={1}
+        />
+      ))}
+    </ProductCards>
+  );
+}
+
 function Intro({ heading, text }: { heading: string; text: string }) {
   return (
     <Prose>
@@ -83,7 +108,7 @@ function Stainless() {
   return (
     <Stack>
       <Intro heading="Stainless CNC Coolant Tube System" text={STAINLESS_INTRO} />
-      <Specs bordered items={STAINLESS_BUILDS.map((b) => ({ key: b.part, label: <Code>{b.part}</Code>, value: b.build }))} />
+      <Gallery items={STAINLESS_PICTURED} />
       <Section title="Complete kits">
         <PartTable label="Stainless coolant tube kits" parts={STAINLESS_KITS} />
       </Section>
@@ -184,6 +209,7 @@ function Dorian() {
   return (
     <Stack>
       <Intro heading="Dorian Tool Jet-Stream through-coolant" text={DORIAN_INTRO} />
+      <Gallery items={DORIAN_PICTURED} />
       <Section title="Low pressure quick-release kits">
         <Caption>3 pieces, up to 30 bar (400 psi).</Caption>
         <Table
@@ -233,6 +259,7 @@ function Piranha() {
   return (
     <Stack>
       <Intro heading="Piranha Cooling Line, high pressure" text={PIRANHA_INTRO} />
+      <Gallery items={PIRANHA_PIECES.map((p) => ({ ...p, href: PIRANHA_CATALOGUE.href }))} />
       <Section title="Three systems">
         <Table
           label="Piranha Cooling Line systems"
@@ -242,12 +269,14 @@ function Piranha() {
           empty={{ title: "No systems listed" }}
         />
       </Section>
-      <Section title="The building blocks">
-        <Specs bordered items={PIRANHA_PIECES.map((p) => ({ key: p.name, label: p.name, value: p.what }))} />
-      </Section>
       <Prose>
-        <p>The guide lists no Piranha part numbers. Ask Livetools for the full Piranha Cooling Line catalogue.</p>
+        <p>Part numbers and dimensions for every Piranha piece are in the Piranha Cooling Line catalogue.</p>
       </Prose>
+      <Row align="start">
+        <Button icon="download" href={PIRANHA_CATALOGUE.href} linkComponent={NavLink}>
+          {PIRANHA_CATALOGUE.label}
+        </Button>
+      </Row>
     </Stack>
   );
 }
@@ -268,6 +297,7 @@ function LocLine() {
   return (
     <Stack>
       <Intro heading="Loc-Line modular coolant hose" text={LOC_LINE_INTRO} />
+      <Gallery items={LOC_LINE_PICTURED} />
       <Table
         label="Loc-Line systems"
         columns={LOC_LINE_COLUMNS}
@@ -275,9 +305,6 @@ function LocLine() {
         fold={{ summary: "pressure" }}
         empty={{ title: "No systems listed" }}
       />
-      <Section title="Popular parts">
-        <Specs bordered items={LOC_LINE_HIGHLIGHTS.map((h) => ({ key: h.name, label: h.name, value: h.what }))} />
-      </Section>
       <Prose>
         <p>{LOC_LINE_COLOURS}</p>
       </Prose>
@@ -288,12 +315,10 @@ function LocLine() {
         <Button variant="secondary" href="/hpt" linkComponent={NavLink}>
           Find an HPT nozzle
         </Button>
+        <Button variant="secondary" icon="download" href={LOC_LINE_CATALOGUE.href} linkComponent={NavLink}>
+          {LOC_LINE_CATALOGUE.label}
+        </Button>
       </Row>
-      <Prose>
-        <p>
-          Full catalogue with photos and dimensions: <Link href={LOC_LINE_CATALOGUE}>the Loc-Line catalogue</Link>.
-        </p>
-      </Prose>
     </Stack>
   );
 }

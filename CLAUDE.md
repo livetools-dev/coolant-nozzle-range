@@ -24,9 +24,10 @@ not already public, no keys or passwords.
 
 This app is the Livetools coolant nozzle range guide for turning and milling, made from the
 range guide PDF: it compares the five coolant systems, helps pick the right one for the job and
-looks up any part number, and the supplier names in it (Evermore, Dorian, Piranha, Loc-Line,
-Tefen) are the real ranges Livetools sells, not example copy. Its screens are listed in
-`src/App.tsx`.
+looks up any part number. It is customer-facing, so its words speak to customers as Livetools
+("we", "send us"), and the supplier names in it (Evermore, Dorian, Piranha, Loc-Line, Tefen) are
+the real ranges Livetools sells, not example copy. Its screens are listed in `src/App.tsx`; its
+product photos and the suppliers' catalogues are served from `public/`.
 
 ## The parts and where the list is
 

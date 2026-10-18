@@ -1,7 +1,8 @@
-// The frame every screen sits in: a Shell header carrying the logotype, the
-// app's name and the navigation, over a Panel main holding the routes. An
-// error boundary around it all shows a danger alert with a reload button
-// instead of a blank page.
+// The frame every screen sits in: a Shell header carrying the large logotype,
+// the guide's name and the navigation, a Panel main holding the routes, and a
+// footer with how to reach Livetools and the suppliers' catalogues. An error
+// boundary around it all shows a danger alert with a reload button instead
+// of a blank page.
 
 import { Component, type ErrorInfo, type ReactNode } from "react";
 import { BrowserRouter, Route, Routes, useLocation } from "react-router";
@@ -9,6 +10,7 @@ import {
   Alert,
   Button,
   EmptyState,
+  Footer,
   Link,
   Logotype,
   Navigation,
@@ -18,7 +20,9 @@ import {
   Shell,
   Stack,
 } from "@livetools/ui";
-import type { NavigationItem } from "@livetools/ui";
+import type { FooterColumn, NavigationItem } from "@livetools/ui";
+import { CATALOGUES } from "./data/catalogues";
+import { CONTACT } from "./data/systems";
 import { NavLink } from "./lib/navLink";
 import { Selector } from "./screens/Selector";
 import { Systems } from "./screens/Systems";
@@ -36,6 +40,19 @@ const SECTIONS = [
   { label: "Part finder", href: "/parts" },
   { label: "HPT nozzles", href: "/hpt" },
 ] as const;
+
+const FOOTER_COLUMNS: readonly FooterColumn[] = [
+  {
+    heading: "Contact us",
+    links: [
+      { label: `Phone ${CONTACT.phone}`, href: CONTACT.phoneHref },
+      { label: CONTACT.email, href: `mailto:${CONTACT.email}` },
+      { label: "livetools.com.au", href: CONTACT.website },
+    ],
+  },
+  { heading: "Catalogues", links: CATALOGUES.map((c) => ({ label: c.label, href: c.href })) },
+  { heading: "This guide", links: SECTIONS.map((s) => ({ label: s.label, href: s.href })) },
+];
 
 type BoundaryState = { failed: boolean };
 
@@ -75,9 +92,9 @@ function Frame() {
   const items: readonly NavigationItem[] = SECTIONS.map((s) => ({ label: s.label, href: s.href, current: s.href === pathname }));
   return (
     <>
-      <Shell className="app-band">
+      <Shell className="app-band" logoSize="large">
         <Row>
-          <Logotype tone="white" />
+          <Logotype />
           <span>Coolant Nozzle Range</span>
           <Navigation label="Sections" items={items} linkComponent={NavLink} />
         </Row>
@@ -100,6 +117,22 @@ function Frame() {
           />
         </Routes>
       </Panel>
+      <Footer
+        brand={
+          <Stack gap="sm">
+            <Logotype />
+            <Prose>
+              <p>
+                Coolant nozzles for turning and milling, from a screw-in replacement nozzle to a fully modular
+                high-pressure line. Send us a photo of your setup and we'll match it.
+              </p>
+            </Prose>
+          </Stack>
+        }
+        columns={FOOTER_COLUMNS}
+        legal={`© ${CONTACT.company}, ${CONTACT.address}`}
+        linkComponent={NavLink}
+      />
     </>
   );
 }

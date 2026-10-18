@@ -1,12 +1,13 @@
-// Screen 1, at "/": the guide's quick selector. Pick what the customer has
-// and the screen says where to start, with a way into each suggested
-// system's page; under it, the five systems side by side, and what to send
-// Livetools when nothing fits.
+// Screen 1, at "/": the front page. A banner, then the quick selector: pick
+// what you have and the screen says where to start, with a way into each
+// suggested system's page. Under it, the five systems side by side, and a
+// band asking for a photo when nothing fits.
 
 import { useState } from "react";
-import { Button, Card, Form, Link, Prose, RadioGroup, Row, Stack, Table } from "@livetools/ui";
+import { Button, CallToAction, Card, Form, Hero, Link, Prose, RadioGroup, Row, Stack, Table } from "@livetools/ui";
 import type { RadioItem, TableColumn, TableRow } from "@livetools/ui";
 import { CONTACT, SEND_US, SITUATIONS, SYSTEMS, systemById } from "../data/systems";
+import { photo } from "../lib/assets";
 import { NavLink } from "../lib/navLink";
 
 const SITUATION_ITEMS: readonly RadioItem[] = SITUATIONS.map((s) => ({ value: s.id, label: s.have }));
@@ -37,24 +38,39 @@ const ROWS: readonly TableRow[] = SYSTEMS.map((s) => ({
   label: s.name,
 }));
 
+/** "a, b, c and d", lower-cased after the first, for the sentence asking what to send. */
+function sendUsSentence(items: readonly string[]): string {
+  const lower = items.map((item) => item.charAt(0).toLowerCase() + item.slice(1));
+  return `${lower.slice(0, -1).join(", ")} and ${lower[lower.length - 1]}`;
+}
+
 export function Selector() {
   const [situation, setSituation] = useState<string | null>(null);
   const picked = SITUATIONS.find((s) => s.id === situation);
 
   return (
     <Stack>
+      <Hero
+        heading="Coolant nozzles"
+        lead="Turning and milling. Coolant only works if it reaches the cutting edge: find the right system for your machine, then every part number you need."
+        image={photo("photo-cover")}
+        action={
+          <Button hero href="/parts" linkComponent={NavLink}>
+            Find a part number
+          </Button>
+        }
+      />
       <Prose>
         <h1>Which system suits the job?</h1>
         <p>
-          Coolant only works if it reaches the cutting edge. Nozzles that sag, vibrate or get knocked off-line cost
-          tool life, finish and chip evacuation. The range covers everything from a simple screw-in replacement nozzle
-          to a fully modular high-pressure line. Every option fits turning and milling machines; the right pick comes
-          down to pressure, reach and how often you re-aim.
+          Nozzles that sag, vibrate or get knocked off-line cost you tool life, finish and chip evacuation. Our range
+          covers everything from a simple screw-in replacement nozzle to a fully modular high-pressure line. Every option
+          fits turning and milling machines; the right pick comes down to pressure, reach and how often you re-aim.
         </p>
       </Prose>
       <Form onSubmit={() => {}}>
         <RadioGroup
-          label="What does the customer have?"
+          label="What do you have?"
           name="situation"
           layout="cards"
           items={SITUATION_ITEMS}
@@ -88,20 +104,16 @@ export function Selector() {
         fold={{ summary: "pressure" }}
         empty={{ title: "No systems to compare" }}
       />
-      <Card title="Not sure what you need?" titleAs="h2">
-        <Prose>
-          <p>Send Livetools these four things and they will recommend the best-fit system and quote:</p>
-          <ol>
-            {SEND_US.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ol>
-          <p>
-            Phone <Link href={CONTACT.phoneHref}>{CONTACT.phone}</Link> or email{" "}
-            <Link href={`mailto:${CONTACT.email}`}>{CONTACT.email}</Link>. {CONTACT.company}, {CONTACT.address}.
-          </p>
-        </Prose>
-      </Card>
+      <CallToAction
+        heading="Not sure what you need?"
+        lead={`Send us ${sendUsSentence(SEND_US)}. We'll recommend the best-fit system.`}
+        image={photo("photo-piranha-turret")}
+        actions={
+          <Button cta large href={`mailto:${CONTACT.email}`}>
+            Email us
+          </Button>
+        }
+      />
     </Stack>
   );
 }

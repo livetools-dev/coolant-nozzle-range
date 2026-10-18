@@ -1,6 +1,8 @@
 // Sections 1 to 5 of the range guide: what each system is, and its part
 // numbers where the guide lists them. Loc-Line's full listing is in
-// locline.ts and its HPT nozzles in hpt.ts.
+// locline.ts and its HPT nozzles in hpt.ts. `photo` names a product photo in
+// the site's images folder; `search` is what the part finder searches for to
+// show that product's part numbers.
 
 export type CataloguePart = {
   part: string;
@@ -9,15 +11,25 @@ export type CataloguePart = {
   contents?: string;
 };
 
+/** A product shown with its photo, and where its card leads. */
+export type Pictured = { name: string; what: string; photo: string; href: string };
+
+const finder = (search: string) => `/parts?q=${encodeURIComponent(search)}`;
+
 // Section 1: Stainless CNC Coolant Tube System
 
 export const STAINLESS_INTRO =
   "Segmented stainless steel tube with swivel connectors that bend and hold their position. Ideal for getting coolant or air blast right down into the cut (the A02 and B02 kits are popular for reaching deep into the job). Fits a standard 1/4\" BSP (G1/4) machine port.";
 
-export const STAINLESS_BUILDS: readonly { part: string; build: string }[] = [
-  { part: "A02", build: "250 mm, 5 swivels, short nozzle" },
-  { part: "B02", build: "250 mm, 3 straights, long nozzle" },
-  { part: "C02", build: "94 mm, 1 straight, short nozzle" },
+export const STAINLESS_PICTURED: readonly Pictured[] = [
+  { name: "A02", what: "250 mm, 5 swivels, short nozzle", photo: "stainless-a02", href: finder("A02") },
+  { name: "B02", what: "250 mm, 3 straights, long nozzle", photo: "stainless-b02", href: finder("B02") },
+  { name: "C02", what: "94 mm, 1 straight, short nozzle", photo: "stainless-c02", href: finder("C02") },
+  { name: "JT", what: "Machine fitting", photo: "stainless-jt", href: finder("JT") },
+  { name: "LJG", what: "Extension straight connector", photo: "stainless-ljg", href: finder("LJG") },
+  { name: "WXT", what: "Swivel connector", photo: "stainless-wxt", href: finder("WXT") },
+  { name: "DPT", what: "Short nozzle, 2 mm bore", photo: "stainless-dpt", href: finder("DPT") },
+  { name: "CPT", what: "Long nozzle, 5 mm bore", photo: "stainless-cpt", href: finder("CPT") },
 ];
 
 export const STAINLESS_KITS: readonly CataloguePart[] = [
@@ -50,7 +62,7 @@ export const STAINLESS_SPARES: readonly CataloguePart[] = [
 // Section 2: Evermore ball-joint coolant nozzles
 
 export const EVERMORE_INTRO =
-  'The classic ball-and-gland nozzle found on most CNC lathes and machining centres. Livetools supply two styles direct (they are not listed in the Evermore catalogue): a two-piece M6 ball with a separate screw-in copper tube, so a bent or damaged tube can be replaced without replacing the ball, and a one-piece "lollipop" nozzle with the tube machined as part of the ball.';
+  'The classic ball-and-gland nozzle found on most CNC lathes and machining centres. We supply two styles direct (they are not listed in the Evermore catalogue): a two-piece M6 ball with a separate screw-in copper tube, so a bent or damaged tube can be replaced without replacing the ball, and a one-piece "lollipop" nozzle with the tube machined as part of the ball.';
 
 export const EVERMORE_TWO_PIECE_INTRO =
   "The ball sits in the machine's gland and swivels to aim. The copper tube screws into the M6 thread in the ball and delivers the stream. Choose the ball diameter to suit the gland (12 mm or 14 mm), then the tube length for the reach you need (50 mm or 80 mm). Copper tube: M6 x 1.0 thread, 6 mm OD, 3.5 mm bore.";
@@ -86,7 +98,7 @@ export const EVERMORE_MATCHING =
   'Measure the ball diameter of the nozzle you are replacing: 12 mm, 14 mm and 15 mm are the common gland sizes. Evermore cover 12 mm and 14 mm (M6 thread); Evermore do not make a 15 mm ball. For 15 mm glands, or where the tube threads into the ball with a 1/8" thread, use the Dorian brass balls and nozzles (12 mm and 15 mm balls with 1/8" thread, straight or 90 degree tube). Tube bore and length can be varied to suit the job.';
 
 export const EVERMORE_SPECIALS =
-  "Evermore can produce balls and copper tubes in other diameters and lengths, mostly M6, including sleeve diameters from 12 mm up to 80 mm. Send Livetools the ball diameter, thread and tube length (or a sample) and they will quote.";
+  "Evermore can produce balls and copper tubes in other diameters and lengths, mostly M6, including sleeve diameters from 12 mm up to 80 mm. Send us the ball diameter, thread and tube length (or a sample) and we'll quote.";
 
 // Section 3: Dorian Tool Jet-Stream through-coolant
 
@@ -152,7 +164,13 @@ export const DORIAN_BALLS: readonly { od: string; brass: string; acetal: string 
 ];
 
 export const DORIAN_TOOL_POSTS =
-  "Also available: Dorian SDN and Quadra quick-change tool posts and holders. Ask for the Tool Post catalogue.";
+  "We also supply Dorian SDN and Quadra quick-change tool posts and holders. Ask us for the Tool Post catalogue.";
+
+export const DORIAN_PICTURED: readonly Pictured[] = [
+  { name: "Jet-Stream through-coolant", what: "Coolant through the holder", photo: "dorian-toolpost", href: "/parts?range=Dorian" },
+  { name: "Brass coolant balls", what: '12 mm to 5/8", 1/8" NPT', photo: "dorian-ball-brass", href: finder("JSCNB") },
+  { name: "Acetal coolant balls", what: "On request", photo: "dorian-ball-acetal", href: finder("JSCNA") },
+];
 
 // Section 4: Piranha Cooling Line, high pressure
 
@@ -180,18 +198,19 @@ export const PIRANHA_SYSTEMS: readonly { system: string; passage: string; torque
   },
 ];
 
-export const PIRANHA_PIECES: readonly { name: string; what: string }[] = [
-  { name: '1/8" starter kit', what: "Passage 3.4 mm" },
-  { name: '1/4" starter kit', what: "Passage 5.5 mm" },
-  { name: '1/2" starter kit', what: "Passage 12 mm" },
-  { name: "Round and multi-hole nozzles", what: "Pointed, precise jet" },
-  { name: "Flat nozzles", what: "Widths for grinding" },
-  { name: "Cooling ring", what: "8 nozzles around the tool" },
-  { name: "Ball connectors", what: "Fine angle adjustment" },
-  { name: "Bore adapter", what: "Fits coolant bores in holders" },
-  { name: "Pipe nozzles", what: "Bent and straight reach" },
-  { name: "Y and T pieces", what: "Split one feed to two jets" },
-  { name: "Assembled line", what: "Connector, spacer and nozzle" },
+/** The Piranha pieces, each leading to the Piranha catalogue, where their part numbers are. */
+export const PIRANHA_PIECES: readonly Omit<Pictured, "href">[] = [
+  { name: '1/8" starter kit', what: "Passage 3.4 mm", photo: "piranha-starter-18" },
+  { name: '1/4" starter kit', what: "Passage 5.5 mm", photo: "piranha-starter-14" },
+  { name: '1/2" starter kit', what: "Passage 12 mm", photo: "piranha-starter-12" },
+  { name: "Round and multi-hole nozzles", what: "Pointed, precise jet", photo: "piranha-round-nozzles" },
+  { name: "Flat nozzles", what: "Widths for grinding", photo: "piranha-flat-nozzles" },
+  { name: "Cooling ring", what: "8 nozzles around the tool", photo: "piranha-cooling-ring" },
+  { name: "Ball connectors", what: "Fine angle adjustment", photo: "piranha-ball-connectors" },
+  { name: "Bore adapter", what: "Fits coolant bores in holders", photo: "piranha-bore-adapter" },
+  { name: "Pipe nozzles", what: "Bent and straight reach", photo: "piranha-pipe-nozzles" },
+  { name: "Y and T pieces", what: "Split one feed to two jets", photo: "piranha-y-t-pieces" },
+  { name: "Assembled line", what: "Connector, spacer and nozzle", photo: "piranha-assembled-line" },
 ];
 
 // Section 5: Loc-Line modular coolant hose
@@ -206,22 +225,20 @@ export const LOC_LINE_SYSTEMS: readonly { system: string; pressure: string; flow
   { system: "HPT nozzles", pressure: "0 to 1,000 psi", flow: "", use: "High-pressure coolant delivery" },
 ];
 
-export const LOC_LINE_HIGHLIGHTS: readonly { name: string; what: string }[] = [
-  { name: '1/4" Hose Kit 40413', what: "Segments, 3 nozzles, 2 connectors" },
-  { name: "Nozzle-Rama Pack 41490", what: 'One of every 1/4" nozzle' },
-  { name: "Round nozzles", what: '1/16", 1/8", 1/4" and larger' },
-  { name: "90 degree nozzles", what: "For tight spaces" },
-  { name: "Flat slot nozzles", what: "Wide, even coverage" },
-  { name: "Flat 5-hole nozzle", what: "Multi-stream flat" },
-  { name: "Flare nozzle", what: "Wash-down and flood" },
-  { name: "90 degree spray bar", what: "Coolant parallel to the work" },
-  { name: "ProStream nozzle", what: 'Stainless tube, 0.062" to 0.160" bore' },
-  { name: "Brass ball adapters", what: '10, 12, 14 and 15 mm balls to 1/4" Loc-Line' },
-  { name: "HPT turret nozzle", what: "CT and XR styles, to 1,000 psi" },
-  { name: "NPT and BSPT connectors", what: '1/8" to 3/4" threads' },
+export const LOC_LINE_PICTURED: readonly Pictured[] = [
+  { name: '1/4" Hose Kit 40413', what: "Segments, 3 nozzles, 2 connectors", photo: "locline-hose-kit", href: finder("40413") },
+  { name: "Nozzle-Rama Pack 41490", what: 'One of every 1/4" nozzle', photo: "locline-nozzle-rama", href: finder("Nozzle-Rama") },
+  { name: "Round nozzles", what: '1/16", 1/8", 1/4" and larger', photo: "locline-round-nozzle", href: finder("Round Nozzle") },
+  { name: "90 degree nozzles", what: "For tight spaces", photo: "locline-90-nozzle", href: finder("90° Nozzle") },
+  { name: "Flat slot nozzles", what: "Wide, even coverage", photo: "locline-flat-slot", href: finder("Flat Slot") },
+  { name: "Flat 5-hole nozzle", what: "Multi-stream flat", photo: "locline-flat-5-hole", href: finder("5-Hole") },
+  { name: "Flare nozzle", what: "Wash-down and flood", photo: "locline-flare", href: finder("Flare Nozzle") },
+  { name: "90 degree spray bar", what: "Coolant parallel to the work", photo: "locline-spray-bar", href: finder("Spray Bar") },
+  { name: "ProStream nozzle", what: 'Stainless tube, 0.062" to 0.160" bore', photo: "locline-prostream", href: finder("ProStream") },
+  { name: "Brass ball adapters", what: '10, 12, 14 and 15 mm balls to 1/4" Loc-Line', photo: "locline-ball-adapters", href: finder("Ball Adapter") },
+  { name: "HPT turret nozzle", what: "CT and XR styles, to 1,000 psi", photo: "locline-hpt", href: "/hpt" },
+  { name: "NPT and BSPT connectors", what: '1/8" to 3/4" threads', photo: "locline-connectors", href: finder("Connector") },
 ];
 
 export const LOC_LINE_COLOURS =
   "Where a colour code is shown, the part can also be ordered in black (-BLK), grey (-G) or white (-W) by adding the suffix to the part number, for example 49421-BLK. The standard colour is the familiar Loc-Line orange and blue. Small packs suit one machine; the larger packs (50 ft coils, 20 and 50 packs) are for the tool crib.";
-
-export const LOC_LINE_CATALOGUE = "https://loc-line.com/files/catalog/Loc-Line.pdf";

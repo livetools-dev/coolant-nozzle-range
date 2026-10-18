@@ -1,9 +1,23 @@
 // Screen 4, at "/hpt": the Loc-Line HPT nozzle chooser. Pick the style,
-// thread, nozzle length and bore, and the screen gives the 2-pack and
-// 10-pack part numbers; under it, all 64 nozzles in one table.
+// thread, nozzle length and bore, and the screen gives the 2-pack and 10-pack
+// part numbers; under it, all 64 nozzles in one table. The style is in the
+// address (?style=XR), so another page can link to one.
 
 import { useState } from "react";
-import { Code, Form, FormGrid, Prose, RadioGroup, Readout, Row, Select, Specs, Stack, Table } from "@livetools/ui";
+import { useSearchParams } from "react-router";
+import {
+  Code,
+  Form,
+  FormGrid,
+  Prose,
+  RadioGroup,
+  Readout,
+  Row,
+  Select,
+  Specs,
+  Stack,
+  Table,
+} from "@livetools/ui";
 import type { RadioItem, SelectItem, TableColumn, TableRow } from "@livetools/ui";
 import {
   HPT_BORES,
@@ -48,7 +62,9 @@ const ROWS: readonly TableRow[] = HPT_NOZZLES.map((n) => ({
 }));
 
 export function Hpt() {
-  const [style, setStyle] = useState<HptStyle>("CT");
+  const [params, setParams] = useSearchParams();
+  const style: HptStyle = params.get("style") === "XR" ? "XR" : "CT";
+  const setStyle = (next: HptStyle) => setParams({ style: next }, { replace: true, preventScrollReset: true });
   const [thread, setThread] = useState<HptThread>("1/8");
   const [length, setLength] = useState<string | null>(null);
   const [bore, setBore] = useState<string | null>(null);
