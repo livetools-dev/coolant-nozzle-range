@@ -113,6 +113,19 @@ function PictureTable({ label, items }: { label: string; items: readonly Picture
   return <Table label={label} columns={PICTURED_COLUMNS} rows={rows} empty={{ title: "No products listed" }} />;
 }
 
+/** A system's opening words with the guide's photo of it at work beside them, as the guide prints it. */
+function IntroWithPhoto({ heading, text, photo, caption }: { heading: string; text: string; photo: string; caption: string }) {
+  return (
+    <Columns count={2}>
+      <Intro heading={heading} text={text} />
+      <Stack gap="sm">
+        {picture(photo, caption, "photo")}
+        <Caption>{caption}</Caption>
+      </Stack>
+    </Columns>
+  );
+}
+
 function Intro({ heading, text }: { heading: string; text: string }) {
   return (
     <Prose>
@@ -314,7 +327,12 @@ const PIRANHA_ROWS: readonly TableRow[] = PIRANHA_SYSTEMS.map((s) => ({
 function Piranha() {
   return (
     <Stack>
-      <Intro heading="Piranha Cooling Line, high pressure" text={PIRANHA_INTRO} />
+      <IntroWithPhoto
+        heading="Piranha Cooling Line, high pressure"
+        text={PIRANHA_INTRO}
+        photo="photo-piranha-turret"
+        caption="Piranha Cooling Line on a lathe turret"
+      />
       <Section title="The building blocks">
         <PictureTable label="Piranha Cooling Line pieces" items={PIRANHA_PIECES} />
       </Section>
@@ -354,7 +372,12 @@ const LOC_LINE_ROWS: readonly TableRow[] = LOC_LINE_SYSTEMS.map((s) => ({
 function LocLine() {
   return (
     <Stack>
-      <Intro heading="Loc-Line modular coolant hose" text={LOC_LINE_INTRO} />
+      <IntroWithPhoto
+        heading="Loc-Line modular coolant hose"
+        text={LOC_LINE_INTRO}
+        photo="photo-locline-drilling"
+        caption='1/4" Loc-Line on a drilling job'
+      />
       <Table
         label="Loc-Line systems"
         columns={LOC_LINE_COLUMNS}
