@@ -1,3 +1,5 @@
-# Livetools app (Vite)
+# Coolant Nozzle Range
 
-This is a template for a small Livetools app built with the Livetools design system and published on GitHub Pages; it starts as a working example, a tool crib with three screens. To start a new app, press "Use this template" at the top of this page and create a repository from it. In the new repository, turn on one setting once: Settings, Pages, and set the source to "GitHub Actions". Everything else, from installing to building screens to publishing, is done by the AI from inside the repository.
+The Livetools coolant nozzle range guide for turning and milling as a small web app: compare the five systems (stainless coolant tube, Evermore ball-joint nozzles, Dorian Jet-Stream, Piranha Cooling Line and Loc-Line), pick the right one for the job, find an HPT nozzle, and look up any part number in the guide.
+
+It is a small Livetools app built with the Livetools design system and published on GitHub Pages. Everything, from installing to building screens to publishing, is done by the AI from inside the repository.

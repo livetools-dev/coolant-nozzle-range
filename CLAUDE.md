@@ -8,17 +8,6 @@ Vite 8, React 19, TypeScript and React Router 7, and every screen is made from t
 The person you are working with does not read code and knows nothing about development. Most
 of this file follows from that. Read "Talking to the person" before your first message to them.
 
-## If this session is on the template itself
-
-If the repository you are in is `livetools-dev/livetools-app-vite-template` (the template, not an app made
-from it) and the person asks for a new app, use the `new-app` skill in `.claude/skills/new-app/`.
-It asks the person two questions (the name, and what the app is for), creates an empty
-repository, turns Pages on before any files exist so the site publishes on its first push, puts
-the template in without the example screens, builds the first screen from the parts the purpose
-needs, and hands back the address. The same skill can be installed outside this repository and
-run from anywhere; it fetches the template itself. Nothing in the template changes for one app:
-continue in the new repository.
-
 ## What may not be built here
 
 This app is public and hosted on GitHub Pages. It must carry no commercial transactions (no
@@ -31,20 +20,13 @@ the other Livetools template; do not build a partial version.
 The repository is public, so nothing private goes in it: no customer data, no prices that are
 not already public, no keys or passwords.
 
-## The example app
+## This app
 
-The template starts with a small example, a tool crib for one workshop, so the person sees a
-working app on day one. It has three screens under one navigation bar: Tools (a filterable table
-of cutting tools with a detail strip per row, an add and edit dialog, check out and return),
-Speeds (a cutting-speed calculator that recalculates as the person types and switches between
-metric and imperial), and Machines (cards for the machines on the floor, and a three-step wizard
-to add one). The data is seed files in `src/data/`, and every edit lives in memory until the page
-reloads. It exists to show the parts working together. When the person describes their own app,
-replace it: change or remove its screens, data and links as their app needs. Its screen files
-are the quickest way to see how a part is used in practice, so read them before removing them.
-
-In any example copy, the only supplier or brand names allowed are Evolute, NS Tools, Palbit and
-PH Horn. Livetools ruled that, so example data never names another company.
+This app is the Livetools coolant nozzle range guide for turning and milling, made from the
+range guide PDF: it compares the five coolant systems, helps pick the right one for the job and
+looks up any part number, and the supplier names in it (Evermore, Dorian, Piranha, Loc-Line,
+Tefen) are the real ranges Livetools sells, not example copy. Its screens are listed in
+`src/App.tsx`.
 
 ## The parts and where the list is
 

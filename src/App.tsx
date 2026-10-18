@@ -3,8 +3,8 @@
 // error boundary around it all shows a danger alert with a reload button
 // instead of a blank page.
 
-import { Component, forwardRef, type ComponentPropsWithoutRef, type ErrorInfo, type ReactNode } from "react";
-import { BrowserRouter, Link as RouterLink, Route, Routes, useLocation } from "react-router";
+import { Component, type ErrorInfo, type ReactNode } from "react";
+import { BrowserRouter, Route, Routes, useLocation } from "react-router";
 import {
   Alert,
   Button,
@@ -19,9 +19,11 @@ import {
   Stack,
 } from "@livetools/ui";
 import type { NavigationItem } from "@livetools/ui";
-import { Tools } from "./screens/Tools";
-import { Speeds } from "./screens/Speeds";
-import { Machines } from "./screens/Machines";
+import { NavLink } from "./lib/navLink";
+import { Selector } from "./screens/Selector";
+import { Systems } from "./screens/Systems";
+import { Parts } from "./screens/Parts";
+import { Hpt } from "./screens/Hpt";
 
 /** Where the app is served from: "/" locally, "/<repository>/" on GitHub Pages
  * without a custom domain. The router takes it without the trailing slash. */
@@ -29,17 +31,11 @@ const BASE = import.meta.env.BASE_URL;
 const BASENAME = BASE.replace(/\/$/, "");
 
 const SECTIONS = [
-  { label: "Tools", href: "/" },
-  { label: "Speeds", href: "/speeds" },
-  { label: "Machines", href: "/machines" },
+  { label: "Choose a system", href: "/" },
+  { label: "Systems", href: "/systems" },
+  { label: "Part finder", href: "/parts" },
+  { label: "HPT nozzles", href: "/hpt" },
 ] as const;
-
-/** React Router's Link takes `to`; the Navigation part hands its link component `href`. */
-const NavLink = forwardRef<HTMLAnchorElement, Omit<ComponentPropsWithoutRef<"a">, "href"> & { href: string }>(
-  function NavLink({ href, ...rest }, ref) {
-    return <RouterLink ref={ref} to={href} {...rest} />;
-  },
-);
 
 type BoundaryState = { failed: boolean };
 
@@ -62,7 +58,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, BoundaryState> {
         <Alert variant="danger" title="Something went wrong">
           <Stack gap="sm">
             <Prose>
-              <p>This screen hit a fault and stopped. Reloading the page starts it again; edits made since the last reload are lost.</p>
+              <p>This screen hit a fault and stopped. Reloading the page starts it again.</p>
             </Prose>
             <Row>
               <Button onClick={() => window.location.reload()}>Reload the page</Button>
@@ -82,21 +78,22 @@ function Frame() {
       <Shell className="app-band">
         <Row>
           <Logotype tone="white" />
-          <span>Tool crib</span>
+          <span>Coolant Nozzle Range</span>
           <Navigation label="Sections" items={items} linkComponent={NavLink} />
         </Row>
       </Shell>
       <Panel as="main" className="app-main">
         <Routes>
-          <Route path="/" element={<Tools />} />
-          <Route path="/speeds" element={<Speeds />} />
-          <Route path="/machines" element={<Machines />} />
+          <Route path="/" element={<Selector />} />
+          <Route path="/systems" element={<Systems />} />
+          <Route path="/parts" element={<Parts />} />
+          <Route path="/hpt" element={<Hpt />} />
           <Route
             path="*"
             element={
               <EmptyState title="Nothing at this address">
                 <Link href="/" linkComponent={NavLink} standalone>
-                  Back to the tools
+                  Back to choosing a system
                 </Link>
               </EmptyState>
             }
