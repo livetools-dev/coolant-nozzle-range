@@ -35,7 +35,7 @@ Because it is customer-facing, Scott asked on 2026-10-18 for the Marketing theme
 root; leave both as they are. Three things the screens needed are reported to the design system
 in `docs/consumer-reports/2026-10-18-coolant-nozzle-range.md` there: the email band's button
 under its words (not met yet), the front banner's photo shown whole (met by a prepared picture,
-`public/images/hero-cover.webp`), and product photos in table cells (a plain image sized by
+`public/images/hero-cover.webp`: the cover photo right of centre on its own light background, 4000 by 800, placed so a laptop band shows it whole), and product photos in table cells (a plain image sized by
 `--app-thumb-size`, in `src/lib/thumb.ts`). When a release answers one, move the screen onto the
 part and drop the interim.
 

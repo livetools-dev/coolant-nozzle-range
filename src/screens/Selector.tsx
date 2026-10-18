@@ -57,7 +57,7 @@ function sendUsSentence(items: readonly string[]): string {
   return `${lower.slice(0, -1).join(", ")} and ${lower[lower.length - 1]}`;
 }
 
-/** The front page's banner: the whole photo in the middle of a band as wide as the page. The picture is the guide's cover photo set in the middle of a wide strip of the band's own colour, so the band shows all of it on a computer screen. */
+/** The front page's banner, as wide as the page. Its picture is the guide's cover photo set right of centre in a wide strip of the photo's own light background, so the band shows all of it on a laptop or a wide screen; the band lays its dark wash over the whole picture. */
 export function FrontHero() {
   return (
     <Hero
