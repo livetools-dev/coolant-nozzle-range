@@ -1,7 +1,8 @@
 // Screen 3, at "/parts": every part number in the range in one list, with a
 // search and filters by range, system and kind of part. Each row opens a
 // strip with its contents, notes and the colours it can be ordered in. The
-// address can preset the range or the search (?range=Loc-Line, ?q=40413).
+// address can preset the range, the system or group and the search
+// (?range=Piranha&group=Piranha 1/4" system, ?q=40413).
 
 import { useState } from "react";
 import { useSearchParams } from "react-router";
@@ -52,10 +53,15 @@ function matches(part: Part, state: FilterState, skip?: string): boolean {
 function initialState(params: URLSearchParams): FilterState {
   const empty = emptyFilterState(SCHEMA);
   const range = params.get("range");
+  const group = params.get("group");
   return {
     ...empty,
     q: params.get("q") ?? "",
-    facets: { ...empty.facets, range: range !== null && (RANGES as readonly string[]).includes(range) ? [range] : [] },
+    facets: {
+      ...empty.facets,
+      range: range !== null && (RANGES as readonly string[]).includes(range) ? [range] : [],
+      group: group !== null && GROUPS.includes(group) ? [group] : [],
+    },
   };
 }
 
@@ -120,8 +126,8 @@ export function Parts() {
       <Prose>
         <h1>Part finder</h1>
         <p>
-          Every part number in our coolant nozzle range: stainless coolant tube, Evermore, Dorian and the full Loc-Line
-          listing, HPT nozzles included. Search by part number or description, or narrow the list by range, system and
+          Every part number in our coolant nozzle range: stainless coolant tube, Evermore, Dorian, the Piranha Cooling
+          Line catalogue and the full Loc-Line listing, HPT nozzles included. Search by part number or description, or narrow the list by range, system and
           kind of part. Open a row for its contents and the colours it comes in.
         </p>
       </Prose>

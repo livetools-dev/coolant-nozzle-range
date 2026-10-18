@@ -27,7 +27,8 @@ range guide PDF: it compares the five coolant systems, helps pick the right one 
 looks up any part number. It is customer-facing, so its words speak to customers as Livetools
 ("we", "send us"), and the supplier names in it (Evermore, Dorian, Piranha, Loc-Line, Tefen) are
 the real ranges Livetools sells, not example copy. Its screens are listed in `src/App.tsx`; its
-product photos and the suppliers' catalogues are served from `public/`.
+product photos and the suppliers' catalogues are served from `public/`. The Piranha part numbers
+come from the Piranha Cooling Line catalogue (2022), not the range guide, which lists none.
 
 Because it is customer-facing, Scott asked on 2026-10-18 for the Marketing theme: the provider in
 `src/main.tsx` takes `theme="marketing"` and `src/globals.css` imports

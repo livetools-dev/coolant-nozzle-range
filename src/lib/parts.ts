@@ -1,10 +1,12 @@
-// Every part number in the range guide as one list, for the part finder:
-// the stainless tube kits and spares, the Evermore and Dorian parts, the
-// Loc-Line listing and the HPT nozzles. Piranha has no part numbers in the
-// guide, so it has no rows here.
+// Every part number in the range as one list, for the part finder: the
+// stainless tube kits and spares, the Evermore and Dorian parts, the Piranha
+// catalogue, the Loc-Line listing and the HPT nozzles. Piranha and Loc-Line
+// both have 1/4" and 1/2" systems, so their system groups carry the range's
+// name, to keep them apart in the finder's "System or group" filter.
 
 import { HPT_NOZZLES, boreLabel, lengthLabel } from "../data/hpt";
 import { LOC_LINE_PARTS, type LocLineColour } from "../data/locline";
+import { PIRANHA_PARTS } from "../data/piranha";
 import {
   DORIAN_BALLS,
   DORIAN_HIGH_PRESSURE,
@@ -15,9 +17,14 @@ import {
   STAINLESS_SPARES,
 } from "../data/ranges";
 
-export type Range = "Stainless tube" | "Evermore" | "Dorian" | "Loc-Line";
+export type Range = "Stainless tube" | "Evermore" | "Dorian" | "Piranha" | "Loc-Line";
 
-export const RANGES: readonly Range[] = ["Stainless tube", "Evermore", "Dorian", "Loc-Line"];
+export const RANGES: readonly Range[] = ["Stainless tube", "Evermore", "Dorian", "Piranha", "Loc-Line"];
+
+/** A system's group in the finder, named with its range: 'Piranha 1/4" system'. */
+export function systemGroup(range: Range, system: string): string {
+  return system.endsWith("system") ? `${range} ${system}` : system;
+}
 
 export type Part = {
   /** Unique across the list; the part number, or the number and the pack where one number is shared. */
@@ -117,6 +124,16 @@ const dorian: readonly Part[] = [
   ]),
 ];
 
+const piranha: readonly Part[] = PIRANHA_PARTS.map((p) => ({
+  id: p.part,
+  part: p.part,
+  name: p.name,
+  contents: p.contents,
+  range: "Piranha",
+  group: systemGroup("Piranha", p.system),
+  category: p.category,
+}));
+
 const locLine: readonly Part[] = LOC_LINE_PARTS.map((p) => ({
   id: p.part,
   part: p.part,
@@ -124,7 +141,7 @@ const locLine: readonly Part[] = LOC_LINE_PARTS.map((p) => ({
   contents: p.pack,
   note: p.note,
   range: "Loc-Line",
-  group: p.system,
+  group: systemGroup("Loc-Line", p.system),
   category: p.category,
   colours: p.colours,
 }));
@@ -138,7 +155,7 @@ const hpt: readonly Part[] = HPT_NOZZLES.flatMap((n) => {
   ];
 });
 
-export const PARTS: readonly Part[] = [...stainless, ...evermore, ...dorian, ...locLine, ...hpt];
+export const PARTS: readonly Part[] = [...stainless, ...evermore, ...dorian, ...piranha, ...locLine, ...hpt];
 
 /** Every group in the list, in the order they first appear. */
 export const GROUPS: readonly string[] = [...new Set(PARTS.map((p) => p.group))];

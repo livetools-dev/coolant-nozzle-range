@@ -16,6 +16,17 @@ export type Pictured = { name: string; what: string; photo: string; href?: strin
 
 const finder = (search: string) => `/parts?q=${encodeURIComponent(search)}`;
 
+/** The part finder showing Loc-Line parts only, searched for these words. */
+const locLineFinder = (search: string) => `/parts?range=Loc-Line&q=${encodeURIComponent(search)}`;
+
+/** The part finder showing Piranha parts only, searched for these words when given. */
+export const piranhaFinder = (search?: string) =>
+  `/parts?range=Piranha${search === undefined ? "" : `&q=${encodeURIComponent(search)}`}`;
+
+/** The part finder showing one Piranha system's parts: '1/4"' shows the 1/4" system. */
+export const piranhaSystemFinder = (system: string) =>
+  `/parts?range=Piranha&group=${encodeURIComponent(`Piranha ${system} system`)}`;
+
 // Section 1: Stainless CNC Coolant Tube System
 
 export const STAINLESS_INTRO =
@@ -197,19 +208,19 @@ export const PIRANHA_SYSTEMS: readonly { system: string; passage: string; torque
   },
 ];
 
-/** The Piranha pieces; their part numbers are in the Piranha catalogue. */
+/** The Piranha pieces, each leading to its part numbers in the part finder (from the Piranha catalogue). */
 export const PIRANHA_PIECES: readonly Pictured[] = [
-  { name: '1/8" starter kit', what: "Passage 3.4 mm", photo: "piranha-starter-18" },
-  { name: '1/4" starter kit', what: "Passage 5.5 mm", photo: "piranha-starter-14" },
-  { name: '1/2" starter kit', what: "Passage 12 mm", photo: "piranha-starter-12" },
-  { name: "Round and multi-hole nozzles", what: "Pointed, precise jet", photo: "piranha-round-nozzles" },
-  { name: "Flat nozzles", what: "Widths for grinding", photo: "piranha-flat-nozzles" },
-  { name: "Cooling ring", what: "8 nozzles around the tool", photo: "piranha-cooling-ring" },
-  { name: "Ball connectors", what: "Fine angle adjustment", photo: "piranha-ball-connectors" },
-  { name: "Bore adapter", what: "Fits coolant bores in holders", photo: "piranha-bore-adapter" },
-  { name: "Pipe nozzles", what: "Bent and straight reach", photo: "piranha-pipe-nozzles" },
-  { name: "Y and T pieces", what: "Split one feed to two jets", photo: "piranha-y-t-pieces" },
-  { name: "Assembled line", what: "Connector, spacer and nozzle", photo: "piranha-assembled-line" },
+  { name: '1/8" starter kit', what: "Passage 3.4 mm", photo: "piranha-starter-18", href: piranhaFinder('PCL-1/8"') },
+  { name: '1/4" starter kit', what: "Passage 5.5 mm", photo: "piranha-starter-14", href: piranhaFinder("PCL-1/4") },
+  { name: '1/2" starter kit', what: "Passage 12 mm", photo: "piranha-starter-12", href: piranhaFinder('PCL-1/2"') },
+  { name: "Round and multi-hole nozzles", what: "Pointed, precise jet", photo: "piranha-round-nozzles", href: piranhaFinder("Round nozzle") },
+  { name: "Flat nozzles", what: "Widths for grinding", photo: "piranha-flat-nozzles", href: piranhaFinder("Flat nozzle") },
+  { name: "Cooling ring", what: "8 nozzles around the tool", photo: "piranha-cooling-ring", href: piranhaFinder("Cooling ring") },
+  { name: "Ball connectors", what: "Fine angle adjustment", photo: "piranha-ball-connectors", href: piranhaFinder("Ball socket connector") },
+  { name: "Bore adapter", what: "Fits coolant bores in holders", photo: "piranha-bore-adapter", href: piranhaFinder("Bore adapter") },
+  { name: "Pipe nozzles", what: "Bent and straight reach", photo: "piranha-pipe-nozzles", href: piranhaFinder("Round tube nozzle") },
+  { name: "Y and T pieces", what: "Split one feed to two jets", photo: "piranha-y-t-pieces", href: piranhaFinder("distributor") },
+  { name: "Assembled line", what: "Connector, spacer and nozzle", photo: "piranha-assembled-line", href: piranhaFinder() },
 ];
 
 // Section 5: Loc-Line modular coolant hose
@@ -225,18 +236,18 @@ export const LOC_LINE_SYSTEMS: readonly { system: string; pressure: string; flow
 ];
 
 export const LOC_LINE_POPULAR: readonly Pictured[] = [
-  { name: '1/4" Hose Kit 40413', what: "Segments, 3 nozzles, 2 connectors", photo: "locline-hose-kit", href: finder("40413") },
-  { name: "Nozzle-Rama Pack 41490", what: 'One of every 1/4" nozzle', photo: "locline-nozzle-rama", href: finder("Nozzle-Rama") },
-  { name: "Round nozzles", what: '1/16", 1/8", 1/4" and larger', photo: "locline-round-nozzle", href: finder("Round Nozzle") },
-  { name: "90 degree nozzles", what: "For tight spaces", photo: "locline-90-nozzle", href: finder("90° Nozzle") },
-  { name: "Flat slot nozzles", what: "Wide, even coverage", photo: "locline-flat-slot", href: finder("Flat Slot") },
-  { name: "Flat 5-hole nozzle", what: "Multi-stream flat", photo: "locline-flat-5-hole", href: finder("5-Hole") },
-  { name: "Flare nozzle", what: "Wash-down and flood", photo: "locline-flare", href: finder("Flare Nozzle") },
-  { name: "90 degree spray bar", what: "Coolant parallel to the work", photo: "locline-spray-bar", href: finder("Spray Bar") },
-  { name: "ProStream nozzle", what: 'Stainless tube, 0.062" to 0.160" bore', photo: "locline-prostream", href: finder("ProStream") },
-  { name: "Brass ball adapters", what: '10, 12, 14 and 15 mm balls to 1/4" Loc-Line', photo: "locline-ball-adapters", href: finder("Ball Adapter") },
+  { name: '1/4" Hose Kit 40413', what: "Segments, 3 nozzles, 2 connectors", photo: "locline-hose-kit", href: locLineFinder("40413") },
+  { name: "Nozzle-Rama Pack 41490", what: 'One of every 1/4" nozzle', photo: "locline-nozzle-rama", href: locLineFinder("Nozzle-Rama") },
+  { name: "Round nozzles", what: '1/16", 1/8", 1/4" and larger', photo: "locline-round-nozzle", href: locLineFinder("Round Nozzle") },
+  { name: "90 degree nozzles", what: "For tight spaces", photo: "locline-90-nozzle", href: locLineFinder("90° Nozzle") },
+  { name: "Flat slot nozzles", what: "Wide, even coverage", photo: "locline-flat-slot", href: locLineFinder("Flat Slot") },
+  { name: "Flat 5-hole nozzle", what: "Multi-stream flat", photo: "locline-flat-5-hole", href: locLineFinder("5-Hole") },
+  { name: "Flare nozzle", what: "Wash-down and flood", photo: "locline-flare", href: locLineFinder("Flare Nozzle") },
+  { name: "90 degree spray bar", what: "Coolant parallel to the work", photo: "locline-spray-bar", href: locLineFinder("Spray Bar") },
+  { name: "ProStream nozzle", what: 'Stainless tube, 0.062" to 0.160" bore', photo: "locline-prostream", href: locLineFinder("ProStream") },
+  { name: "Brass ball adapters", what: '10, 12, 14 and 15 mm balls to 1/4" Loc-Line', photo: "locline-ball-adapters", href: locLineFinder("Ball Adapter") },
   { name: "HPT turret nozzle", what: "CT and XR styles, to 1,000 psi", photo: "locline-hpt", href: "/hpt" },
-  { name: "NPT and BSPT connectors", what: '1/8" to 3/4" threads', photo: "locline-connectors", href: finder("Connector") },
+  { name: "NPT and BSPT connectors", what: '1/8" to 3/4" threads', photo: "locline-connectors", href: locLineFinder("Connector") },
 ];
 
 export const LOC_LINE_COLOURS =

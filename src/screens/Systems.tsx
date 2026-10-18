@@ -36,6 +36,8 @@ import {
   STAINLESS_SPARES,
   type CataloguePart,
   type DorianKit,
+  piranhaFinder,
+  piranhaSystemFinder,
   type Pictured,
 } from "../data/ranges";
 import { LOC_LINE_CATALOGUE, PIRANHA_CATALOGUE } from "../data/catalogues";
@@ -321,7 +323,16 @@ const PIRANHA_COLUMNS: readonly TableColumn[] = [
 
 const PIRANHA_ROWS: readonly TableRow[] = PIRANHA_SYSTEMS.map((s) => ({
   id: s.system,
-  cells: { system: s.system, passage: s.passage, torque: s.torque, connectors: s.connectors },
+  cells: {
+    system: (
+      <Link href={piranhaSystemFinder(s.system)} linkComponent={NavLink}>
+        {`${s.system} system`}
+      </Link>
+    ),
+    passage: s.passage,
+    torque: s.torque,
+    connectors: s.connectors,
+  },
 }));
 
 function Piranha() {
@@ -345,11 +356,11 @@ function Piranha() {
           empty={{ title: "No systems listed" }}
         />
       </Section>
-      <Prose>
-        <p>Part numbers and dimensions for every Piranha piece are in the Piranha Cooling Line catalogue.</p>
-      </Prose>
       <Row align="start">
-        <Button icon="download" href={PIRANHA_CATALOGUE.href} linkComponent={NavLink}>
+        <Button href={piranhaFinder()} linkComponent={NavLink}>
+          Every Piranha part number
+        </Button>
+        <Button variant="secondary" icon="download" href={PIRANHA_CATALOGUE.href} linkComponent={NavLink}>
           {PIRANHA_CATALOGUE.label}
         </Button>
       </Row>
