@@ -5,7 +5,7 @@
 
 import type { ReactNode } from "react";
 import { useSearchParams } from "react-router";
-import { Badge, Button, Caption, Code, Link, Prose, Row, Stack, Table, Tabs } from "@livetools/ui";
+import { Badge, Button, Caption, Code, Columns, Link, Prose, Row, Stack, Table, Tabs } from "@livetools/ui";
 import type { TabItem, TableColumn, TableRow } from "@livetools/ui";
 import {
   DORIAN_BALLS,
@@ -21,6 +21,8 @@ import {
   EVERMORE_ONE_PIECE_INTRO,
   EVERMORE_SPECIALS,
   EVERMORE_TWO_PIECE,
+  EVERMORE_TUBE_DRAWINGS,
+  EVERMORE_TUBE_SPEC,
   EVERMORE_TWO_PIECE_INTRO,
   LOC_LINE_COLOURS,
   LOC_LINE_INTRO,
@@ -39,7 +41,7 @@ import {
 import { LOC_LINE_CATALOGUE, PIRANHA_CATALOGUE } from "../data/catalogues";
 import { SYSTEMS, type SystemId } from "../data/systems";
 import { NavLink } from "../lib/navLink";
-import { thumb } from "../lib/thumb";
+import { picture, thumb } from "../lib/thumb";
 
 const PICTURE: TableColumn = { id: "picture", label: "Picture", headingHidden: true };
 
@@ -64,7 +66,10 @@ function partRows(parts: readonly CataloguePart[]): readonly TableRow[] {
 }
 
 function PartTable({ label, parts, contents = "Contents" }: { label: string; parts: readonly CataloguePart[]; contents?: string }) {
-  const columns = PART_COLUMNS.map((c) => (c.id === "contents" ? { ...c, label: contents } : c));
+  const pictured = parts.some((p) => p.photo !== undefined);
+  const columns = PART_COLUMNS.filter((c) => pictured || c.id !== "picture").map((c) =>
+    c.id === "contents" ? { ...c, label: contents } : c,
+  );
   return (
     <Table label={label} columns={columns} rows={partRows(parts)} fold={{}} empty={{ title: "No parts listed" }} />
   );
@@ -164,10 +169,25 @@ function Evermore() {
   return (
     <Stack>
       <Intro heading="Evermore ball-joint coolant nozzles" text={EVERMORE_INTRO} />
-      <Section title="Two-piece: ball and copper tube">
-        <Prose>
-          <p>{EVERMORE_TWO_PIECE_INTRO}</p>
-        </Prose>
+      <Columns count={2}>
+        {picture("evermore-ball", "An Evermore coolant ball, with its diameter D, length L and thread M marked", "photo")}
+        <Stack gap="sm">
+          <Prose>
+            <h3>Two-piece: ball and copper tube</h3>
+            <p>{EVERMORE_TWO_PIECE_INTRO}</p>
+            <p>
+              <strong>{EVERMORE_TUBE_SPEC}</strong>
+            </p>
+          </Prose>
+          {EVERMORE_TUBE_DRAWINGS.map((d) => (
+            <Stack gap="sm" key={d.photo}>
+              {picture(d.photo, `Drawing of ${d.caption}`, "drawing")}
+              <Caption>{d.caption}</Caption>
+            </Stack>
+          ))}
+        </Stack>
+      </Columns>
+      <Section title="Two-piece range (stocked)">
         <PartTable label="Evermore two-piece range, stocked" parts={EVERMORE_TWO_PIECE} contents="Notes" />
       </Section>
       <Section title='One-piece "lollipop" nozzles'>
@@ -240,6 +260,7 @@ function Dorian() {
       <Intro heading="Dorian Tool Jet-Stream through-coolant" text={DORIAN_INTRO} />
       <Section title="Low pressure quick-release kits">
         <Caption>3 pieces, up to 30 bar (400 psi).</Caption>
+        {picture("dorian-kit-low-pressure", "The low pressure quick-release kit: braided tubing with a quick-release connector at each end", "strip")}
         <Table
           label="Dorian low pressure quick-release kits"
           columns={KIT_COLUMNS}
@@ -250,6 +271,7 @@ function Dorian() {
       </Section>
       <Section title="High pressure quick-release kits">
         <Caption>5 pieces, 200 bar (2,800 psi).</Caption>
+        {picture("dorian-kit-high-pressure", "The high pressure quick-release kit: straight connector, quick-release couplings, braided HP tubing and a 90 degree elbow", "strip")}
         <Table
           label="Dorian high pressure quick-release kits"
           columns={KIT_COLUMNS}

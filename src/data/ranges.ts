@@ -57,13 +57,21 @@ export const EVERMORE_INTRO =
   'The classic ball-and-gland nozzle found on most CNC lathes and machining centres. We supply two styles direct (they are not listed in the Evermore catalogue): a two-piece M6 ball with a separate screw-in copper tube, so a bent or damaged tube can be replaced without replacing the ball, and a one-piece "lollipop" nozzle with the tube machined as part of the ball.';
 
 export const EVERMORE_TWO_PIECE_INTRO =
-  "The ball sits in the machine's gland and swivels to aim. The copper tube screws into the M6 thread in the ball and delivers the stream. Choose the ball diameter to suit the gland (12 mm or 14 mm), then the tube length for the reach you need (50 mm or 80 mm). Copper tube: M6 x 1.0 thread, 6 mm OD, 3.5 mm bore.";
+  "The ball sits in the machine's gland and swivels to aim. The copper tube screws into the M6 thread in the ball and delivers the stream. Choose the ball diameter to suit the gland (12 mm or 14 mm), then the tube length for the reach you need (50 mm or 80 mm).";
 
 export const EVERMORE_TWO_PIECE: readonly CataloguePart[] = [
-  { part: "BALLNOZZLEM6x12", photo: "evermore-ball", description: "Coolant ball, 12 mm diameter, M6 internal thread", contents: "Pairs with NOZZLEM6 tubes" },
-  { part: "BALLNOZZLEM6x14", photo: "evermore-ball", description: "Coolant ball, 14 mm diameter, M6 internal thread", contents: "Pairs with NOZZLEM6 tubes" },
-  { part: "NOZZLEM6x50L", photo: "evermore-tube-50", description: "Copper coolant tube, M6 thread, 50 mm long (drawing ref. 0M6050-112)", contents: "Short reach" },
-  { part: "NOZZLEM6x80L", photo: "evermore-tube-80", description: "Copper coolant tube, M6 thread, 80 mm long (drawing ref. 0M6080-112)", contents: "Long reach" },
+  { part: "BALLNOZZLEM6x12", description: "Coolant ball, 12 mm diameter, M6 internal thread", contents: "Pairs with NOZZLEM6 tubes" },
+  { part: "BALLNOZZLEM6x14", description: "Coolant ball, 14 mm diameter, M6 internal thread", contents: "Pairs with NOZZLEM6 tubes" },
+  { part: "NOZZLEM6x50L", description: "Copper coolant tube, M6 thread, 50 mm long (drawing ref. 0M6050-112)", contents: "Short reach" },
+  { part: "NOZZLEM6x80L", description: "Copper coolant tube, M6 thread, 80 mm long (drawing ref. 0M6080-112)", contents: "Long reach" },
+];
+
+export const EVERMORE_TUBE_SPEC = "Copper tube, M6 x 1.0 thread, 6 mm OD, 3.5 mm bore";
+
+/** The guide's drawings of the two copper tubes, each with its caption. */
+export const EVERMORE_TUBE_DRAWINGS: readonly { photo: string; caption: string }[] = [
+  { photo: "evermore-tube-50", caption: "NOZZLEM6x50L, 50 mm (drawing ref. 0M6050-112)" },
+  { photo: "evermore-tube-80", caption: "NOZZLEM6x80L, 80 mm (drawing ref. 0M6080-112)" },
 ];
 
 export const EVERMORE_ONE_PIECE_INTRO =

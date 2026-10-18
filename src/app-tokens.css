@@ -1,5 +1,9 @@
 /* App-level tokens: the one place a literal is allowed.
-   The width of a product photo in a table, as the range guide prints them. */
+   The width of a product photo in a table, and the most a photo beside text
+   a drawing or a kit's strip picture may take, as the range guide prints them. */
 :root {
   --app-thumb-size: 7.5rem;
+  --app-photo-size: 20rem;
+  --app-drawing-size: 34rem;
+  --app-strip-size: 48rem;
 }

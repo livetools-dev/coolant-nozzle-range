@@ -23,3 +23,25 @@
   inline-size: var(--app-thumb-size);
   block-size: auto;
 }
+
+/* A photo set beside text, a drawing under it, and a kit's strip picture over
+   its table (see src/lib/thumb.ts): as wide as their space, up to a cap each. */
+.app-photo,
+.app-drawing,
+.app-strip {
+  display: block;
+  inline-size: 100%;
+  block-size: auto;
+}
+
+.app-photo {
+  max-inline-size: var(--app-photo-size);
+}
+
+.app-drawing {
+  max-inline-size: var(--app-drawing-size);
+}
+
+.app-strip {
+  max-inline-size: var(--app-strip-size);
+}
