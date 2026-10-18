@@ -1,20 +1,19 @@
 // Screen 2, at "/systems": the five systems in the range, one tab each, with
-// what each is for, photos of its parts and its part numbers. Each photo card
-// leads to that product's part numbers (or, for Piranha, its catalogue). The
-// open tab is in the address (?system=dorian) so other pages can link
-// straight to one.
+// what each is for and its part numbers, with the guide's product photos in
+// the tables as the guide prints them. The open tab is in the address
+// (?system=dorian) so other pages can link straight to one.
 
 import type { ReactNode } from "react";
 import { useSearchParams } from "react-router";
-import { Badge, Button, Caption, Code, ProductCard, ProductCards, Prose, Row, Stack, Table, Tabs } from "@livetools/ui";
+import { Badge, Button, Caption, Code, Link, Prose, Row, Stack, Table, Tabs } from "@livetools/ui";
 import type { TabItem, TableColumn, TableRow } from "@livetools/ui";
 import {
   DORIAN_BALLS,
   DORIAN_BALLS_INTRO,
   DORIAN_HIGH_PRESSURE,
   DORIAN_INTRO,
+  DORIAN_BALL_MATERIALS,
   DORIAN_LOW_PRESSURE,
-  DORIAN_PICTURED,
   DORIAN_TOOL_POSTS,
   EVERMORE_INTRO,
   EVERMORE_MATCHING,
@@ -25,26 +24,28 @@ import {
   EVERMORE_TWO_PIECE_INTRO,
   LOC_LINE_COLOURS,
   LOC_LINE_INTRO,
-  LOC_LINE_PICTURED,
+  LOC_LINE_POPULAR,
   LOC_LINE_SYSTEMS,
   PIRANHA_INTRO,
   PIRANHA_PIECES,
   PIRANHA_SYSTEMS,
   STAINLESS_INTRO,
   STAINLESS_KITS,
-  STAINLESS_PICTURED,
   STAINLESS_SPARES,
   type CataloguePart,
   type DorianKit,
   type Pictured,
 } from "../data/ranges";
 import { LOC_LINE_CATALOGUE, PIRANHA_CATALOGUE } from "../data/catalogues";
-import { photo } from "../lib/assets";
 import { SYSTEMS, type SystemId } from "../data/systems";
 import { NavLink } from "../lib/navLink";
+import { thumb } from "../lib/thumb";
+
+const PICTURE: TableColumn = { id: "picture", label: "Picture", headingHidden: true };
 
 const PART_COLUMNS: readonly TableColumn[] = [
   { id: "part", label: "Part no.", kind: "code", rowHeader: true, nowrap: true },
+  PICTURE,
   { id: "description", label: "Description" },
   { id: "contents", label: "Contents" },
 ];
@@ -52,7 +53,12 @@ const PART_COLUMNS: readonly TableColumn[] = [
 function partRows(parts: readonly CataloguePart[]): readonly TableRow[] {
   return parts.map((p) => ({
     id: p.part,
-    cells: { part: <Code>{p.part}</Code>, description: p.description, contents: p.contents ?? "" },
+    cells: {
+      part: <Code>{p.part}</Code>,
+      picture: p.photo === undefined ? "" : thumb(p.photo, `${p.part}, ${p.description}`),
+      description: p.description,
+      contents: p.contents ?? "",
+    },
     label: p.part,
   }));
 }
@@ -75,24 +81,31 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
   );
 }
 
-/** A row of product photos, each card leading to that product. */
-function Gallery({ items }: { items: readonly Pictured[] }) {
-  return (
-    <ProductCards shape="square" backdrop="circle" count={3}>
-      {items.map((item) => (
-        <ProductCard
-          key={item.name}
-          href={item.href}
-          linkComponent={NavLink}
-          meta={item.what}
-          title={item.name}
-          image={photo(item.photo)}
-          imageAlign="centre"
-          imageScale={1}
-        />
-      ))}
-    </ProductCards>
-  );
+const PICTURED_COLUMNS: readonly TableColumn[] = [
+  PICTURE,
+  { id: "name", label: "Product", rowHeader: true },
+  { id: "what", label: "What it is" },
+];
+
+/** Products the guide shows with a photo: the photo, the name (a link to its part numbers where it has one) and a line on what it is. */
+function PictureTable({ label, items }: { label: string; items: readonly Pictured[] }) {
+  const rows: readonly TableRow[] = items.map((item) => ({
+    id: item.name,
+    cells: {
+      picture: thumb(item.photo, item.name),
+      name:
+        item.href === undefined ? (
+          item.name
+        ) : (
+          <Link href={item.href} linkComponent={NavLink}>
+            {item.name}
+          </Link>
+        ),
+      what: item.what,
+    },
+    label: item.name,
+  }));
+  return <Table label={label} columns={PICTURED_COLUMNS} rows={rows} empty={{ title: "No products listed" }} />;
 }
 
 function Intro({ heading, text }: { heading: string; text: string }) {
@@ -108,14 +121,13 @@ function Stainless() {
   return (
     <Stack>
       <Intro heading="Stainless CNC Coolant Tube System" text={STAINLESS_INTRO} />
-      <Gallery items={STAINLESS_PICTURED} />
       <Section title="Complete kits">
         <PartTable label="Stainless coolant tube kits" parts={STAINLESS_KITS} />
       </Section>
       <Section title="Spare components">
         <Table
           label="Stainless coolant tube spare components"
-          columns={PART_COLUMNS.slice(0, 2)}
+          columns={PART_COLUMNS.slice(0, 3)}
           rows={partRows(STAINLESS_SPARES)}
           empty={{ title: "No spares listed" }}
         />
@@ -200,6 +212,23 @@ const BALL_COLUMNS: readonly TableColumn[] = [
   { id: "acetal", label: "Acetal (on request)", kind: "code" },
 ];
 
+const MATERIAL_COLUMNS: readonly TableColumn[] = [
+  PICTURE,
+  { id: "material", label: "Material", rowHeader: true },
+  { id: "parts", label: "Part numbers", kind: "code" },
+  { id: "availability", label: "Availability" },
+];
+
+const MATERIAL_ROWS: readonly TableRow[] = DORIAN_BALL_MATERIALS.map((m) => ({
+  id: m.material,
+  cells: {
+    picture: thumb(m.photo, `${m.material} ball-type coolant nozzle`),
+    material: m.material,
+    parts: <Code>{`${m.prefix}-12 to ${m.prefix}-62`}</Code>,
+    availability: m.availability,
+  },
+}));
+
 const BALL_ROWS: readonly TableRow[] = DORIAN_BALLS.map((b) => ({
   id: b.od,
   cells: { od: b.od, brass: <Code>{b.brass}</Code>, acetal: <Code>{b.acetal}</Code> },
@@ -209,7 +238,6 @@ function Dorian() {
   return (
     <Stack>
       <Intro heading="Dorian Tool Jet-Stream through-coolant" text={DORIAN_INTRO} />
-      <Gallery items={DORIAN_PICTURED} />
       <Section title="Low pressure quick-release kits">
         <Caption>3 pieces, up to 30 bar (400 psi).</Caption>
         <Table
@@ -234,6 +262,12 @@ function Dorian() {
         <Prose>
           <p>{DORIAN_BALLS_INTRO}</p>
         </Prose>
+        <Table
+          label="Dorian ball materials"
+          columns={MATERIAL_COLUMNS}
+          rows={MATERIAL_ROWS}
+          empty={{ title: "No materials listed" }}
+        />
         <Table label="Dorian ball-type coolant nozzles" columns={BALL_COLUMNS} rows={BALL_ROWS} empty={{ title: "No balls listed" }} />
       </Section>
       <Prose>
@@ -259,7 +293,9 @@ function Piranha() {
   return (
     <Stack>
       <Intro heading="Piranha Cooling Line, high pressure" text={PIRANHA_INTRO} />
-      <Gallery items={PIRANHA_PIECES.map((p) => ({ ...p, href: PIRANHA_CATALOGUE.href }))} />
+      <Section title="The building blocks">
+        <PictureTable label="Piranha Cooling Line pieces" items={PIRANHA_PIECES} />
+      </Section>
       <Section title="Three systems">
         <Table
           label="Piranha Cooling Line systems"
@@ -297,7 +333,6 @@ function LocLine() {
   return (
     <Stack>
       <Intro heading="Loc-Line modular coolant hose" text={LOC_LINE_INTRO} />
-      <Gallery items={LOC_LINE_PICTURED} />
       <Table
         label="Loc-Line systems"
         columns={LOC_LINE_COLUMNS}
@@ -305,6 +340,10 @@ function LocLine() {
         fold={{ summary: "pressure" }}
         empty={{ title: "No systems listed" }}
       />
+      <Prose>
+        <h3>Popular parts</h3>
+      </Prose>
+      <PictureTable label="Popular Loc-Line parts" items={LOC_LINE_POPULAR} />
       <Prose>
         <p>{LOC_LINE_COLOURS}</p>
       </Prose>

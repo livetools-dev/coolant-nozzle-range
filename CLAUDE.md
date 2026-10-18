@@ -29,6 +29,16 @@ looks up any part number. It is customer-facing, so its words speak to customers
 the real ranges Livetools sells, not example copy. Its screens are listed in `src/App.tsx`; its
 product photos and the suppliers' catalogues are served from `public/`.
 
+Because it is customer-facing, Scott asked on 2026-10-18 for the Marketing theme: the provider in
+`src/main.tsx` takes `theme="marketing"` and `src/globals.css` imports
+`@livetools/ui/marketing.css` after the package's styles. That is the one change made to the
+root; leave both as they are. Three things the screens needed are reported to the design system
+in `docs/consumer-reports/2026-10-18-coolant-nozzle-range.md` there: the email band's button
+under its words (not met yet), the front banner's photo shown whole (met by a prepared picture,
+`public/images/hero-cover.webp`), and product photos in table cells (a plain image sized by
+`--app-thumb-size`, in `src/lib/thumb.ts`). When a release answers one, move the screen onto the
+part and drop the interim.
+
 ## The parts and where the list is
 
 Read `node_modules/@livetools/ui/PARTS.md` before writing a screen. It is generated from the

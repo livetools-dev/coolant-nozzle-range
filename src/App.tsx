@@ -1,5 +1,6 @@
 // The frame every screen sits in: a Shell header carrying the large logotype,
-// the guide's name and the navigation, a Panel main holding the routes, and a
+// the guide's name and the navigation, the front page's full-width banner on
+// the front page, a Panel main holding the routes, and a
 // footer with how to reach Livetools and the suppliers' catalogues. An error
 // boundary around it all shows a danger alert with a reload button instead
 // of a blank page.
@@ -24,7 +25,7 @@ import type { FooterColumn, NavigationItem } from "@livetools/ui";
 import { CATALOGUES } from "./data/catalogues";
 import { CONTACT } from "./data/systems";
 import { NavLink } from "./lib/navLink";
-import { Selector } from "./screens/Selector";
+import { FrontHero, Selector } from "./screens/Selector";
 import { Systems } from "./screens/Systems";
 import { Parts } from "./screens/Parts";
 import { Hpt } from "./screens/Hpt";
@@ -99,6 +100,7 @@ function Frame() {
           <Navigation label="Sections" items={items} linkComponent={NavLink} />
         </Row>
       </Shell>
+      {pathname === "/" && <FrontHero />}
       <Panel as="main" className="app-main">
         <Routes>
           <Route path="/" element={<Selector />} />

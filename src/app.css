@@ -15,3 +15,11 @@
     padding-inline: var(--lt-space-7);
   }
 }
+
+/* A product photo in a table cell (see src/lib/thumb.ts): one width for every
+   row, its height following the picture. */
+.app-thumb {
+  display: block;
+  inline-size: var(--app-thumb-size);
+  block-size: auto;
+}

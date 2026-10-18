@@ -1,18 +1,30 @@
-// Screen 1, at "/": the front page. A banner, then the quick selector: pick
-// what you have and the screen says where to start, with a way into each
-// suggested system's page. Under it, the five systems side by side, and a
-// band asking for a photo when nothing fits.
+// Screen 1, at "/": the front page. Its banner runs the full width of the
+// page above the panel, so the frame draws it (FrontHero). Then the quick
+// selector: pick what you have and the screen says where to start, with a
+// way into each suggested system's page. Under it, the five systems side by
+// side with the guide's photos, and a band saying how to get the right
+// nozzle fast.
 
 import { useState } from "react";
 import { Button, CallToAction, Card, Form, Hero, Link, Prose, RadioGroup, Row, Stack, Table } from "@livetools/ui";
 import type { RadioItem, TableColumn, TableRow } from "@livetools/ui";
-import { CONTACT, SEND_US, SITUATIONS, SYSTEMS, systemById } from "../data/systems";
-import { photo } from "../lib/assets";
+import { CONTACT, SEND_US, SITUATIONS, SYSTEMS, systemById, type SystemId } from "../data/systems";
+import { asset, photo } from "../lib/assets";
 import { NavLink } from "../lib/navLink";
+import { thumb } from "../lib/thumb";
+
+const SYSTEM_PHOTOS: Readonly<Record<SystemId, string>> = {
+  stainless: "system-stainless",
+  evermore: "system-evermore",
+  dorian: "system-dorian",
+  piranha: "system-piranha",
+  locline: "system-locline",
+};
 
 const SITUATION_ITEMS: readonly RadioItem[] = SITUATIONS.map((s) => ({ value: s.id, label: s.have }));
 
 const COLUMNS: readonly TableColumn[] = [
+  { id: "picture", label: "Picture", headingHidden: true },
   { id: "system", label: "System", rowHeader: true },
   { id: "bestFor", label: "Best for" },
   { id: "pressure", label: "Pressure" },
@@ -24,6 +36,7 @@ const COLUMNS: readonly TableColumn[] = [
 const ROWS: readonly TableRow[] = SYSTEMS.map((s) => ({
   id: s.id,
   cells: {
+    picture: thumb(SYSTEM_PHOTOS[s.id], s.name),
     system: (
       <Link href={`/systems?system=${s.id}`} linkComponent={NavLink}>
         {s.name}
@@ -44,22 +57,28 @@ function sendUsSentence(items: readonly string[]): string {
   return `${lower.slice(0, -1).join(", ")} and ${lower[lower.length - 1]}`;
 }
 
+/** The front page's banner: the whole photo in the middle of a band as wide as the page. The picture is the guide's cover photo set in the middle of a wide strip of the band's own colour, so the band shows all of it on a computer screen. */
+export function FrontHero() {
+  return (
+    <Hero
+      heading="Coolant nozzles"
+      lead="Turning and milling. Coolant only works if it reaches the cutting edge: find the right system for your machine, then every part number you need."
+      image={asset("images/hero-cover.webp")}
+      action={
+        <Button hero href="/parts" linkComponent={NavLink}>
+          Find a part number
+        </Button>
+      }
+    />
+  );
+}
+
 export function Selector() {
   const [situation, setSituation] = useState<string | null>(null);
   const picked = SITUATIONS.find((s) => s.id === situation);
 
   return (
     <Stack>
-      <Hero
-        heading="Coolant nozzles"
-        lead="Turning and milling. Coolant only works if it reaches the cutting edge: find the right system for your machine, then every part number you need."
-        image={photo("photo-cover")}
-        action={
-          <Button hero href="/parts" linkComponent={NavLink}>
-            Find a part number
-          </Button>
-        }
-      />
       <Prose>
         <h1>Which system suits the job?</h1>
         <p>
@@ -105,9 +124,9 @@ export function Selector() {
         empty={{ title: "No systems to compare" }}
       />
       <CallToAction
-        heading="Not sure what you need?"
+        heading="How to get the right nozzle, fast"
         lead={`Send us ${sendUsSentence(SEND_US)}. We'll recommend the best-fit system.`}
-        image={photo("photo-piranha-turret")}
+        image={photo("system-piranha")}
         actions={
           <Button cta large href={`mailto:${CONTACT.email}`}>
             Email us

@@ -1,18 +1,18 @@
 // Sections 1 to 5 of the range guide: what each system is, and its part
 // numbers where the guide lists them. Loc-Line's full listing is in
-// locline.ts and its HPT nozzles in hpt.ts. `photo` names a product photo in
-// the site's images folder; `search` is what the part finder searches for to
-// show that product's part numbers.
+// locline.ts and its HPT nozzles in hpt.ts. `photo` names the guide's own
+// photo of a product in the site's images folder.
 
 export type CataloguePart = {
   part: string;
   description: string;
   /** What comes in it, or a note beside it. */
   contents?: string;
+  photo?: string;
 };
 
-/** A product shown with its photo, and where its card leads. */
-export type Pictured = { name: string; what: string; photo: string; href: string };
+/** A product the guide shows with its photo, and where its name leads. */
+export type Pictured = { name: string; what: string; photo: string; href?: string };
 
 const finder = (search: string) => `/parts?q=${encodeURIComponent(search)}`;
 
@@ -21,30 +21,22 @@ const finder = (search: string) => `/parts?q=${encodeURIComponent(search)}`;
 export const STAINLESS_INTRO =
   "Segmented stainless steel tube with swivel connectors that bend and hold their position. Ideal for getting coolant or air blast right down into the cut (the A02 and B02 kits are popular for reaching deep into the job). Fits a standard 1/4\" BSP (G1/4) machine port.";
 
-export const STAINLESS_PICTURED: readonly Pictured[] = [
-  { name: "A02", what: "250 mm, 5 swivels, short nozzle", photo: "stainless-a02", href: finder("A02") },
-  { name: "B02", what: "250 mm, 3 straights, long nozzle", photo: "stainless-b02", href: finder("B02") },
-  { name: "C02", what: "94 mm, 1 straight, short nozzle", photo: "stainless-c02", href: finder("C02") },
-  { name: "JT", what: "Machine fitting", photo: "stainless-jt", href: finder("JT") },
-  { name: "LJG", what: "Extension straight connector", photo: "stainless-ljg", href: finder("LJG") },
-  { name: "WXT", what: "Swivel connector", photo: "stainless-wxt", href: finder("WXT") },
-  { name: "DPT", what: "Short nozzle, 2 mm bore", photo: "stainless-dpt", href: finder("DPT") },
-  { name: "CPT", what: "Long nozzle, 5 mm bore", photo: "stainless-cpt", href: finder("CPT") },
-];
-
 export const STAINLESS_KITS: readonly CataloguePart[] = [
   {
     part: "A02",
+    photo: "stainless-a02",
     description: 'CNC Coolant Tube, stainless, 250 mm, BSP 1/4"',
     contents: "2 x straight connectors, 5 x swivel connectors, 1 x short nozzle (2 mm)",
   },
   {
     part: "B02",
+    photo: "stainless-b02",
     description: 'CNC Coolant Tube, stainless, 250 mm, BSP 1/4"',
     contents: "3 x straight connectors, 1 x long nozzle (5 mm)",
   },
   {
     part: "C02",
+    photo: "stainless-c02",
     description: 'CNC Coolant Tube, stainless, 94 mm, BSP 1/4"',
     contents: "1 x straight connector, 1 x short nozzle (2 mm)",
   },
@@ -52,11 +44,11 @@ export const STAINLESS_KITS: readonly CataloguePart[] = [
 ];
 
 export const STAINLESS_SPARES: readonly CataloguePart[] = [
-  { part: "JT", description: 'Machine fitting, BSP 1/4" (G1/4), 18.5 mm' },
-  { part: "LJG", description: 'Extension straight connector, 57 mm, BSP 1/4"' },
-  { part: "WXT", description: "Swivel connector, 25 mm" },
-  { part: "DPT", description: "Short nozzle, 25 mm, 2 mm bore" },
-  { part: "CPT", description: "Long nozzle, 68 mm, 5 mm bore" },
+  { part: "JT", photo: "stainless-jt", description: 'Machine fitting, BSP 1/4" (G1/4), 18.5 mm' },
+  { part: "LJG", photo: "stainless-ljg", description: 'Extension straight connector, 57 mm, BSP 1/4"' },
+  { part: "WXT", photo: "stainless-wxt", description: "Swivel connector, 25 mm" },
+  { part: "DPT", photo: "stainless-dpt", description: "Short nozzle, 25 mm, 2 mm bore" },
+  { part: "CPT", photo: "stainless-cpt", description: "Long nozzle, 68 mm, 5 mm bore" },
 ];
 
 // Section 2: Evermore ball-joint coolant nozzles
@@ -68,10 +60,10 @@ export const EVERMORE_TWO_PIECE_INTRO =
   "The ball sits in the machine's gland and swivels to aim. The copper tube screws into the M6 thread in the ball and delivers the stream. Choose the ball diameter to suit the gland (12 mm or 14 mm), then the tube length for the reach you need (50 mm or 80 mm). Copper tube: M6 x 1.0 thread, 6 mm OD, 3.5 mm bore.";
 
 export const EVERMORE_TWO_PIECE: readonly CataloguePart[] = [
-  { part: "BALLNOZZLEM6x12", description: "Coolant ball, 12 mm diameter, M6 internal thread", contents: "Pairs with NOZZLEM6 tubes" },
-  { part: "BALLNOZZLEM6x14", description: "Coolant ball, 14 mm diameter, M6 internal thread", contents: "Pairs with NOZZLEM6 tubes" },
-  { part: "NOZZLEM6x50L", description: "Copper coolant tube, M6 thread, 50 mm long (drawing ref. 0M6050-112)", contents: "Short reach" },
-  { part: "NOZZLEM6x80L", description: "Copper coolant tube, M6 thread, 80 mm long (drawing ref. 0M6080-112)", contents: "Long reach" },
+  { part: "BALLNOZZLEM6x12", photo: "evermore-ball", description: "Coolant ball, 12 mm diameter, M6 internal thread", contents: "Pairs with NOZZLEM6 tubes" },
+  { part: "BALLNOZZLEM6x14", photo: "evermore-ball", description: "Coolant ball, 14 mm diameter, M6 internal thread", contents: "Pairs with NOZZLEM6 tubes" },
+  { part: "NOZZLEM6x50L", photo: "evermore-tube-50", description: "Copper coolant tube, M6 thread, 50 mm long (drawing ref. 0M6050-112)", contents: "Short reach" },
+  { part: "NOZZLEM6x80L", photo: "evermore-tube-80", description: "Copper coolant tube, M6 thread, 80 mm long (drawing ref. 0M6080-112)", contents: "Long reach" },
 ];
 
 export const EVERMORE_ONE_PIECE_INTRO =
@@ -166,10 +158,9 @@ export const DORIAN_BALLS: readonly { od: string; brass: string; acetal: string 
 export const DORIAN_TOOL_POSTS =
   "We also supply Dorian SDN and Quadra quick-change tool posts and holders. Ask us for the Tool Post catalogue.";
 
-export const DORIAN_PICTURED: readonly Pictured[] = [
-  { name: "Jet-Stream through-coolant", what: "Coolant through the holder", photo: "dorian-toolpost", href: "/parts?range=Dorian" },
-  { name: "Brass coolant balls", what: '12 mm to 5/8", 1/8" NPT', photo: "dorian-ball-brass", href: finder("JSCNB") },
-  { name: "Acetal coolant balls", what: "On request", photo: "dorian-ball-acetal", href: finder("JSCNA") },
+export const DORIAN_BALL_MATERIALS: readonly { material: string; prefix: string; availability: string; photo: string }[] = [
+  { material: "Brass", prefix: "JSCNB", availability: "Standard", photo: "dorian-ball-brass" },
+  { material: "Acetal", prefix: "JSCNA", availability: "On request", photo: "dorian-ball-acetal" },
 ];
 
 // Section 4: Piranha Cooling Line, high pressure
@@ -198,8 +189,8 @@ export const PIRANHA_SYSTEMS: readonly { system: string; passage: string; torque
   },
 ];
 
-/** The Piranha pieces, each leading to the Piranha catalogue, where their part numbers are. */
-export const PIRANHA_PIECES: readonly Omit<Pictured, "href">[] = [
+/** The Piranha pieces; their part numbers are in the Piranha catalogue. */
+export const PIRANHA_PIECES: readonly Pictured[] = [
   { name: '1/8" starter kit', what: "Passage 3.4 mm", photo: "piranha-starter-18" },
   { name: '1/4" starter kit', what: "Passage 5.5 mm", photo: "piranha-starter-14" },
   { name: '1/2" starter kit', what: "Passage 12 mm", photo: "piranha-starter-12" },
@@ -225,7 +216,7 @@ export const LOC_LINE_SYSTEMS: readonly { system: string; pressure: string; flow
   { system: "HPT nozzles", pressure: "0 to 1,000 psi", flow: "", use: "High-pressure coolant delivery" },
 ];
 
-export const LOC_LINE_PICTURED: readonly Pictured[] = [
+export const LOC_LINE_POPULAR: readonly Pictured[] = [
   { name: '1/4" Hose Kit 40413', what: "Segments, 3 nozzles, 2 connectors", photo: "locline-hose-kit", href: finder("40413") },
   { name: "Nozzle-Rama Pack 41490", what: 'One of every 1/4" nozzle', photo: "locline-nozzle-rama", href: finder("Nozzle-Rama") },
   { name: "Round nozzles", what: '1/16", 1/8", 1/4" and larger', photo: "locline-round-nozzle", href: finder("Round Nozzle") },
